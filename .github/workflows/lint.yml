@@ -1,0 +1,46 @@
+name: Basic CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Echo environment info
+        run: |
+          echo "Running on $(uname -a)"
+          echo "Current working directory: $(pwd)"
+          echo "Node version: $(node -v)"
+          echo "NPM version: $(npm -v)"
+          echo "Listing files:"
+          ls -la
+
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          npm ci
+          echo "Dependencies installed successfully ✅"
+
+      - name: Run tests
+        run: |
+          echo "Starting test suite..."
+          npm test
+          echo "Tests completed ✅"
+
+      - name: Echo finish message
+        run: echo "🎉 Pipeline completed successfully!"
